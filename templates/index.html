@@ -1,0 +1,418 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Caesar Cipher Security Lab</title>
+
+  <!-- Google Font: Inter -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+  <!-- CSS -->
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body>
+
+  <!-- ============================================================ -->
+  <!--  SIDEBAR                                                     -->
+  <!-- ============================================================ -->
+  <aside class="sidebar" id="sidebar">
+    <div class="sidebar-header">
+      <div class="logo-mark">
+        <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <rect x="3" y="11" width="18" height="11" rx="2" ry="2"/>
+          <path d="M7 11V7a5 5 0 0 1 10 0v4"/>
+        </svg>
+      </div>
+      <div class="logo-text">
+        <span class="logo-title">CAESAR LAB</span>
+        <span class="logo-sub">Security Analysis</span>
+      </div>
+    </div>
+
+    <nav class="sidebar-nav">
+      <a href="#" class="nav-item" data-section="dashboard">
+        <span class="nav-icon">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="9"/><rect x="14" y="3" width="7" height="5"/><rect x="14" y="12" width="7" height="9"/><rect x="3" y="16" width="7" height="5"/></svg>
+        </span>
+        <span class="nav-label">Dashboard</span>
+      </a>
+      <a href="#" class="nav-item" data-section="encrypt">
+        <span class="nav-icon">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+        </span>
+        <span class="nav-label">Encryption</span>
+      </a>
+      <a href="#" class="nav-item" data-section="decrypt">
+        <span class="nav-icon">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 9.9-1"/></svg>
+        </span>
+        <span class="nav-label">Decryption</span>
+      </a>
+      <a href="#" class="nav-item" data-section="bruteforce">
+        <span class="nav-icon">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14.5 17.5L3 6V3h3l11.5 11.5"/><path d="M13 19l6-6"/><path d="M16 16l4-4"/><path d="M19 21l2-2"/></svg>
+        </span>
+        <span class="nav-label">Brute Force</span>
+      </a>
+      <a href="#" class="nav-item" data-section="learn">
+        <span class="nav-icon">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg>
+        </span>
+        <span class="nav-label">Learn</span>
+      </a>
+    </nav>
+
+    <div class="sidebar-footer">
+      <div class="sidebar-footer-text">
+        <span class="sf-title">Keamanan Siber</span>
+        <span class="sf-sub">Caesar Cipher Lab</span>
+      </div>
+    </div>
+  </aside>
+
+  <!-- Mobile sidebar toggle backdrop -->
+  <div class="sidebar-backdrop" id="sidebarBackdrop"></div>
+
+  <!-- ============================================================ -->
+  <!--  MAIN CONTENT                                                -->
+  <!-- ============================================================ -->
+  <div class="main-wrapper">
+
+    <!-- Topbar (mobile menu button) -->
+    <header class="topbar">
+      <button class="menu-toggle" id="navToggle" aria-label="Toggle menu">
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
+      </button>
+      <div class="topbar-title" id="topbarTitle">Dashboard</div>
+    </header>
+
+    <main class="main-content">
+
+      <!-- ========================================================== -->
+      <!--  SECTION: DASHBOARD                                        -->
+      <!-- ========================================================== -->
+      <section id="dashboard" class="section">
+        <div class="page-header">
+          <h1 class="page-title">Caesar Cipher Security Lab</h1>
+          <p class="page-subtitle">Classical Cryptography &amp; Security Analysis</p>
+        </div>
+
+        <div class="stats-grid">
+          <div class="stat-card">
+            <div class="stat-icon-wrap">
+              <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+            </div>
+            <div class="stat-body">
+              <span class="stat-label">Algoritma</span>
+              <span class="stat-value">Caesar Cipher</span>
+            </div>
+          </div>
+
+          <div class="stat-card">
+            <div class="stat-icon-wrap">
+              <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18l6-6-6-6"/></svg>
+            </div>
+            <div class="stat-body">
+              <span class="stat-label">Ruang Kunci</span>
+              <span class="stat-value">25 shift</span>
+            </div>
+          </div>
+
+          <div class="stat-card">
+            <div class="stat-icon-wrap">
+              <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>
+            </div>
+            <div class="stat-body">
+              <span class="stat-label">Tipe</span>
+              <span class="stat-value">Substitution</span>
+            </div>
+          </div>
+
+          <div class="stat-card">
+            <div class="stat-icon-wrap">
+              <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12" y2="17"/></svg>
+            </div>
+            <div class="stat-body">
+              <span class="stat-label">Tingkat Keamanan</span>
+              <span class="stat-value">Rendah</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="dashboard-cards">
+          <div class="card dashboard-card">
+            <div class="card-header-simple">
+              <h3 class="card-title-mini">Rumus Inti</h3>
+            </div>
+            <div class="formula-row">
+              <div class="formula-pill">C = (P + K) mod 26</div>
+              <div class="formula-pill">P = (C &minus; K) mod 26</div>
+            </div>
+            <p class="card-note">Enkripsi menggeser huruf maju sebesar K, dekripsi menggeser mundur sebesar K.</p>
+          </div>
+
+          <div class="card dashboard-card">
+            <div class="card-header-simple">
+              <h3 class="card-title-mini">Mulai Cepat</h3>
+            </div>
+            <div class="quick-links">
+              <a href="#" class="quick-link" data-section="encrypt">
+                <span class="ql-label">Encryption</span>
+                <span class="ql-desc">Enkripsi plaintext</span>
+              </a>
+              <a href="#" class="quick-link" data-section="decrypt">
+                <span class="ql-label">Decryption</span>
+                <span class="ql-desc">Dekripsi ciphertext</span>
+              </a>
+              <a href="#" class="quick-link" data-section="bruteforce">
+                <span class="ql-label">Brute Force</span>
+                <span class="ql-desc">Coba 25 kemungkinan</span>
+              </a>
+              <a href="#" class="quick-link" data-section="learn">
+                <span class="ql-label">Learn</span>
+                <span class="ql-desc">Pelajari konsep</span>
+              </a>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ========================================================== -->
+      <!--  SECTION: ENCRYPTION                                       -->
+      <!-- ========================================================== -->
+      <section id="encrypt" class="section hidden">
+        <div class="page-header">
+          <h1 class="page-title">Encryption</h1>
+          <p class="page-subtitle">Ubah plaintext menjadi ciphertext dengan menggeser huruf alfabet sebesar nilai shift.</p>
+        </div>
+
+        <div class="two-col-grid">
+          <!-- INPUT CARD -->
+          <div class="card">
+            <div class="card-header-simple">
+              <h3 class="card-title-mini">Input</h3>
+              <span class="badge">C = (P + K) mod 26</span>
+            </div>
+            <div class="form-group">
+              <label for="enc-plaintext">Plaintext</label>
+              <textarea id="enc-plaintext" rows="4" placeholder="Masukkan teks yang ingin dienkripsi..."></textarea>
+            </div>
+            <div class="form-group">
+              <label for="enc-shift">Nilai Shift (K)</label>
+              <input type="number" id="enc-shift" placeholder="Contoh: 3" value="3">
+            </div>
+            <button class="btn btn-primary" id="btn-encrypt">
+              <span class="btn-text">Encrypt</span>
+              <span class="loading-spinner" id="enc-loading"></span>
+            </button>
+          </div>
+
+          <!-- RESULT CARD -->
+          <div class="card">
+            <div class="card-header-simple">
+              <h3 class="card-title-mini">Result</h3>
+            </div>
+            <div class="result-area" id="enc-result" hidden>
+            </div>
+            <div class="result-placeholder" id="enc-placeholder">
+              <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" style="opacity:.4"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+              <p>Hasil enkripsi akan muncul di sini</p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ========================================================== -->
+      <!--  SECTION: DECRYPTION                                       -->
+      <!-- ========================================================== -->
+      <section id="decrypt" class="section hidden">
+        <div class="page-header">
+          <h1 class="page-title">Decryption</h1>
+          <p class="page-subtitle">Kembalikan ciphertext ke plaintext asli dengan menggeser ke arah berlawanan.</p>
+        </div>
+
+        <div class="two-col-grid">
+          <!-- INPUT CARD -->
+          <div class="card">
+            <div class="card-header-simple">
+              <h3 class="card-title-mini">Input</h3>
+              <span class="badge">P = (C &minus; K) mod 26</span>
+            </div>
+            <div class="form-group">
+              <label for="dec-ciphertext">Ciphertext</label>
+              <textarea id="dec-ciphertext" rows="4" placeholder="Masukkan teks yang ingin didekripsi..."></textarea>
+            </div>
+            <div class="form-group">
+              <label for="dec-shift">Nilai Shift (K)</label>
+              <input type="number" id="dec-shift" placeholder="Contoh: 3" value="3">
+            </div>
+            <button class="btn btn-primary" id="btn-decrypt">
+              <span class="btn-text">Decrypt</span>
+              <span class="loading-spinner" id="dec-loading"></span>
+            </button>
+          </div>
+
+          <!-- RESULT CARD -->
+          <div class="card">
+            <div class="card-header-simple">
+              <h3 class="card-title-mini">Result</h3>
+            </div>
+            <div class="result-area" id="dec-result" hidden>
+            </div>
+            <div class="result-placeholder" id="dec-placeholder">
+              <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" style="opacity:.4"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+              <p>Hasil dekripsi akan muncul di sini</p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ========================================================== -->
+      <!--  SECTION: BRUTE FORCE                                      -->
+      <!-- ========================================================== -->
+      <section id="bruteforce" class="section hidden">
+        <div class="page-header">
+          <h1 class="page-title">Brute Force Attack</h1>
+          <p class="page-subtitle">Sistem mencoba seluruh 25 kemungkinan shift untuk menemukan plaintext asli.</p>
+        </div>
+
+        <div class="card">
+          <div class="card-header-simple">
+            <h3 class="card-title-mini">Input</h3>
+            <span class="badge">Coba Shift 1&ndash;25</span>
+          </div>
+          <div class="form-group">
+            <label for="bf-ciphertext">Ciphertext</label>
+            <textarea id="bf-ciphertext" rows="3" placeholder="Masukkan ciphertext yang ingin diretas..."></textarea>
+          </div>
+          <button class="btn btn-primary" id="btn-bruteforce">
+            <span class="btn-text">Run Brute Force</span>
+            <span class="loading-spinner" id="bf-loading"></span>
+          </button>
+        </div>
+
+        <div class="card" style="margin-top:1.5rem" id="bf-result-card" hidden>
+          <div class="card-header-simple">
+            <h3 class="card-title-mini">Hasil Analisis</h3>
+            <span class="badge" id="bf-count-badge">25 kemungkinan</span>
+          </div>
+          <div class="result-area" id="bf-result">
+          </div>
+        </div>
+      </section>
+
+      <!-- ========================================================== -->
+      <!--  SECTION: LEARN                                            -->
+      <!-- ========================================================== -->
+      <section id="learn" class="section hidden">
+        <div class="page-header">
+          <h1 class="page-title">Learn</h1>
+          <p class="page-subtitle">Penjelasan Caesar Cipher &amp; hubungannya dengan keamanan siber.</p>
+        </div>
+
+        <div class="card">
+          <div class="learn-content">
+
+            <div class="learn-block">
+              <h3 class="learn-heading">1. Apa itu Kriptografi?</h3>
+              <p>Kriptografi adalah ilmu dan teknik untuk mengamankan informasi dengan mengubah data (plaintext) menjadi bentuk yang tidak terbaca (ciphertext) sehingga hanya pihak yang memiliki kunci yang dapat membaca kembali data aslinya. Tujuannya meliputi <strong>kerahasiaan (confidentiality)</strong>, <strong>integritas (integrity)</strong>, <strong>autentikasi (authentication)</strong>, dan <strong>non-repudiation</strong>.</p>
+            </div>
+
+            <div class="learn-block">
+              <h3 class="learn-heading">2. Apa itu Caesar Cipher?</h3>
+              <p>Caesar Cipher adalah salah satu algoritma kriptografi klasik paling tua dan paling sederhana. Dinamai dari Julius Caesar, yang menggunakannya untuk berkomunikasi rahasia dengan para panglima militernya. Algoritma ini termasuk jenis <strong>substitution cipher</strong> (sandi substitusi) yang menggeser setiap huruf dalam alfabet sejumlah tertentu.</p>
+            </div>
+
+            <div class="learn-block">
+              <h3 class="learn-heading">3. Cara Kerja Caesar Cipher</h3>
+              <p>Setiap huruf pada plaintext digeser sejauh nilai <strong>K (shift/key)</strong> dalam alfabet. Misalnya dengan K = 3:</p>
+              <ul class="learn-list">
+                <li><code>A &rarr; D</code></li>
+                <li><code>B &rarr; E</code></li>
+                <li><code>X &rarr; A</code> (kembali ke awal, modulo 26)</li>
+              </ul>
+              <p>Huruf besar/kecil dipertahankan, sedangkan spasi, angka, dan tanda baca tidak diubah.</p>
+            </div>
+
+            <div class="learn-block">
+              <h3 class="learn-heading">4. Rumus Enkripsi</h3>
+              <div class="formula">C = (P + K) mod 26</div>
+              <ul class="learn-list">
+                <li><strong>C</strong> = Ciphertext (huruf hasil)</li>
+                <li><strong>P</strong> = Plaintext (huruf asli, A=0 ... Z=25)</li>
+                <li><strong>K</strong> = Key / nilai shift</li>
+                <li><strong>mod 26</strong> = modulo 26 (panjang alfabet)</li>
+              </ul>
+            </div>
+
+            <div class="learn-block">
+              <h3 class="learn-heading">5. Rumus Dekripsi</h3>
+              <div class="formula">P = (C &minus; K) mod 26</div>
+              <p>Kebalikan dari enkripsi: ciphertext digeser mundur sebesar K untuk memperoleh plaintext kembali.</p>
+            </div>
+
+            <div class="learn-block">
+              <h3 class="learn-heading">6. Contoh Penggunaan</h3>
+              <p>Enkripsi kata <strong>"HELLO"</strong> dengan shift <strong>K = 3</strong>:</p>
+              <div class="table-wrapper">
+                <table class="example-table">
+                  <thead>
+                    <tr><th>Plaintext</th><th>+K</th><th>Ciphertext</th></tr>
+                  </thead>
+                  <tbody>
+                    <tr><td>H (7)</td><td>+3</td><td>K (10)</td></tr>
+                    <tr><td>E (4)</td><td>+3</td><td>H (7)</td></tr>
+                    <tr><td>L (11)</td><td>+3</td><td>O (14)</td></tr>
+                    <tr><td>L (11)</td><td>+3</td><td>O (14)</td></tr>
+                    <tr><td>O (14)</td><td>+3</td><td>R (17)</td></tr>
+                  </tbody>
+                </table>
+              </div>
+              <p>Hasil: <strong>HELLO &rarr; KHOOR</strong></p>
+            </div>
+
+            <div class="two-col-grid">
+              <div class="learn-block">
+                <h3 class="learn-heading">7. Kelebihan</h3>
+                <ul class="learn-list">
+                  <li>Sangat sederhana dan mudah dipahami.</li>
+                  <li>Mudah diimplementasikan dengan cepat.</li>
+                  <li>Baik untuk pengenalan konsep dasar kriptografi.</li>
+                  <li>Tidak memerlukan komputasi besar.</li>
+                </ul>
+              </div>
+              <div class="learn-block">
+                <h3 class="learn-heading">8. Kekurangan</h3>
+                <ul class="learn-list">
+                  <li>Ruang kunci sangat kecil (hanya 25 kemungkinan shift).</li>
+                  <li>Sangat mudah diretas dengan brute force.</li>
+                  <li>Mudah dipecahkan dengan analisis frekuensi huruf.</li>
+                  <li>Tidak cocok untuk mengamankan data penting di era modern.</li>
+                </ul>
+              </div>
+            </div>
+
+            <div class="learn-block">
+              <h3 class="learn-heading">9. Hubungan dengan Keamanan Siber</h3>
+              <p>Caesar Cipher mengajarkan prinsip penting dalam Keamanan Siber: <strong>keamanan algoritma tidak boleh bergantung pada kerahasiaan algoritmanya, melainkan pada kerahasiaan kunci (Kerckhoffs's Principle)</strong>. Karena Caesar Cipher memiliki kunci yang lemah dan sedikit, ia menjadi contoh utama algoritma yang <em>tidak aman</em>. Dengan memahami kelemahannya, kita dapat memahami mengapa algoritma modern seperti <strong>AES</strong> dan <strong>RSA</strong> menggunakan kunci yang jauh lebih panjang dan kompleks. Caesar Cipher adalah pelajaran berharga bahwa kesederhanaan bukan berarti keamanan.</p>
+            </div>
+
+          </div>
+        </div>
+      </section>
+
+    </main>
+
+    <!-- Footer -->
+    <footer class="footer">
+      <p>Caesar Cipher Security Lab &middot; Tugas Keamanan Siber</p>
+    </footer>
+  </div>
+
+  <!-- JS -->
+  <script src="{{ url_for('static', filename='js/script.js') }}"></script>
+</body>
+</html>
